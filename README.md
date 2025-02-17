@@ -1,12 +1,9 @@
-# #TWSThreeTierAppChallenge
+# ThreeTierApplication
 
 ## Overview
-This repository hosts the `#TWSThreeTierAppChallenge` for the TWS community. 
-The challenge involves deploying a Three-Tier Web Application using ReactJS, NodeJS, and MongoDB, with deployment on AWS EKS. Participants are encouraged to deploy the application, add creative enhancements, and submit a Pull Request (PR). Merged PRs will earn exciting prizes!
+This repository contains the ThreeTierApplication, a solution built to showcase the power of modern application architecture using a Three-Tier Web Application setup. The application leverages ReactJS for the frontend, NodeJS for the backend, and MongoDB for data storage, with deployment on AWS EKS.
 
-**Get The Challenge here**
-
-[![YouTube Video](https://img.youtube.com/vi/tvWQRTbMS1g/maxresdefault.jpg)](https://youtu.be/tvWQRTbMS1g?si=eki-boMemxr4PU7-)
+In this project, I’ve taken the challenge of deploying a scalable, secure, and efficient web application while ensuring a seamless CI/CD pipeline and reliable monitoring using industry-standard tools.
 
 ## Prerequisites
 - Basic knowledge of Docker, and AWS services.
@@ -148,4 +145,4 @@ Go to EC2 console, access security group section and delete security groups crea
 For any queries or issues, please open an issue in the repository.
 
 ---
-Happy Learning! 🚀👨‍💻👩‍💻
+Happy coding and good luck with your deployment! 🚀👨‍💻👩‍💻
