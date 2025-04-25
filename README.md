@@ -17,7 +17,7 @@ In this project, I’ve taken the challenge of deploying a scalable, secure, and
 - [Project Details](#project-details)
 
 ## Architecture of Three Tier Application
-![Architecture of Three Tier Application Diagram](Architecture of Three Tier Application.png)
+![Architecture of Three Tier Application Diagram](Architecture-of-Three-Tier-Application.png)
 
 ## Application Code
 The `Application-Code` directory contains the source code for the Three-Tier Web Application. Dive into this directory to explore the frontend and backend implementations.
