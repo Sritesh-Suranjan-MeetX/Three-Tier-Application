@@ -38,6 +38,6 @@ jobs:
 
     - name: Build & Push Backend Image
       run: |
-        cd ../../Application-Code/backend
+        cd Application-Code/backend
         docker build -t $ECR_REGISTRY/$BACKEND_IMAGE:latest .
         docker push $ECR_REGISTRY/$BACKEND_IMAGE:latest
