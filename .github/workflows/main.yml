@@ -4,55 +4,21 @@ on:
   push:
     branches: [ "main" ]
 
-env:
-  AWS_REGION: us-east-2
-  ECR_REGISTRY: 376885477991.dkr.ecr.us-east-2.amazonaws.com
-  FRONTEND_IMAGE: three-tier-frontend
-  BACKEND_IMAGE: three-tier-backend
-
 jobs:
-  build-images:
-    name: Build Docker Images
+  build-and-deploy:
+    name: Build & Push Docker Images to ECR
     runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: us-east-2
+      ECR_REGISTRY: 376885477991.dkr.ecr.us-east-2.amazonaws.com
+      FRONTEND_IMAGE: three-tier-frontend
+      BACKEND_IMAGE: three-tier-backend
 
     steps:
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - name: Build Frontend Image
-      run: |
-        cd Application-Code/frontend
-        docker build -t ${{ env.FRONTEND_IMAGE }}:latest .
-
-    - name: Save Frontend Image
-      run: docker save ${{ env.FRONTEND_IMAGE }}:latest -o frontend.tar
-
-    - name: Build Backend Image
-      run: |
-        cd Application-Code/backend
-        docker build -t ${{ env.BACKEND_IMAGE }}:latest .
-
-    - name: Save Backend Image
-      run: docker save ${{ env.BACKEND_IMAGE }}:latest -o backend.tar
-
-    - name: Upload frontend image artifact
-      uses: actions/upload-artifact@v3.1.3
-      with:
-        name: frontend-image
-        path: frontend.tar
-
-    - name: Upload backend image artifact
-      uses: actions/upload-artifact@v3.1.3
-      with:
-        name: backend-image
-        path: backend.tar
-
-  push-images:
-    name: Push Docker Images to ECR
-    runs-on: ubuntu-latest
-    needs: build-images
-
-    steps:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
@@ -61,32 +27,17 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Login to Amazon ECR
+      id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Download frontend image artifact
-      uses: actions/download-artifact@v3.0.2
-      with:
-        name: frontend-image
-        path: .
-
-    - name: Load frontend image and tag it for ECR
+    - name: Build & Push Frontend Image
       run: |
-        docker load -i frontend.tar
-        docker tag ${{ env.FRONTEND_IMAGE }}:latest ${{ env.ECR_REGISTRY }}/${{ env.FRONTEND_IMAGE }}:latest
+        cd Application-Code/frontend
+        docker build -t $ECR_REGISTRY/$FRONTEND_IMAGE:latest .
+        docker push $ECR_REGISTRY/$FRONTEND_IMAGE:latest
 
-    - name: Push frontend image to ECR
-      run: docker push ${{ env.ECR_REGISTRY }}/${{ env.FRONTEND_IMAGE }}:latest
-
-    - name: Download backend image artifact
-      uses: actions/download-artifact@v3.0.2
-      with:
-        name: backend-image
-        path: .
-
-    - name: Load backend image and tag it for ECR
+    - name: Build & Push Backend Image
       run: |
-        docker load -i backend.tar
-        docker tag ${{ env.BACKEND_IMAGE }}:latest ${{ env.ECR_REGISTRY }}/${{ env.BACKEND_IMAGE }}:latest
-
-    - name: Push backend image to ECR
-      run: docker push ${{ env.ECR_REGISTRY }}/${{ env.BACKEND_IMAGE }}:latest
+        cd Application-Code/backend
+        docker build -t $ECR_REGISTRY/$BACKEND_IMAGE:latest .
+        docker push $ECR_REGISTRY/$BACKEND_IMAGE:latest
